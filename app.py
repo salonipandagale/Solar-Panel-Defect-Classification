@@ -35,11 +35,17 @@ st.write("Upload an image of a solar panel to detect defects using your model")
 # Loading the model
 @st.cache_resource
 def load_model():
-    model = tf.keras.models.load_model("solar_model.keras", compile=False, safe_mode=False)
+    model = tf.keras.models.load_model(
+        "solar_model.keras",
+        compile=False,
+        safe_mode=False
+    )
+    
+    # Remove Normalization layer if present
+    if isinstance(model.layers[0], tf.keras.layers.Normalization):
+        model = tf.keras.Model(inputs=model.input, outputs=model.layers[1].output)
+    
     return model
-
-with st.spinner("Loading model..."):
-    model = load_model()
    
 CLASSES = [
     "Bird-drop",
