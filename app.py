@@ -46,7 +46,9 @@ def load_model():
         model = tf.keras.Model(inputs=model.input, outputs=model.layers[1].output)
     
     return model
-   
+
+model = load_model()
+
 CLASSES = [
     "Bird-drop",
     "Clean",
