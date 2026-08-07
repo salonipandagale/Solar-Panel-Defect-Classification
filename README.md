@@ -1,5 +1,7 @@
 # Solar Panel Defect Detection using Deep Learning
 
+### Live demo :
+
 ## 1. Introduction 
 This project focuses on detecting defects in solar panels using deep learning techniques. Identifying defects early is crucial for maintaining efficiency and reducing operational costs in solar energy systems.
 
@@ -70,15 +72,6 @@ These models were fine-tuned for improved generalization.
 | EfficientNetB0  | \~0.94             | \~0.81               |
 
 EfficientNetB0 provided the best performance among all models.
-
-## 5. Future Improvements
-* Fine-tuning pretrained models
-
-* Model deployment (API or web app)
-
-* Real-time defect detection system
-
-* Use of advanced architectures (Vision Transformers)
 
 ## 6.Author 
 Saloni Pandagale
