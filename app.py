@@ -35,7 +35,7 @@ st.write("Upload an image of a solar panel to detect defects using your model")
 # Loading the model
 @st.cache_resource
 def load_model():
-    model = tf.keras.models.load_model("solar_model.keras", compile=False)
+    model = tf.keras.models.load_model("solar_model.keras", compile=False, safe_mode=False)
     return model
 
 with st.spinner("Loading model..."):
