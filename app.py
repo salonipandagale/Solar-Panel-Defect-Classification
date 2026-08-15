@@ -51,15 +51,18 @@ CLASSES = [
     "Snow-Covered"
 ]
 
+@st.cache_resource(show_spinner=False)
+def load_model():
+    interpreter = tf.lite.Interpreter(
+        model_path="solar_model.tflite"
+    )
+    interpreter.allocate_tensors()
+    return interpreter
+
 uploaded_file = st.file_uploader(
     "Upload a solar panel image...",
     type=["jpg", "jpeg", "png"]
 )
-
-@st.cache_resource(show_spinner=False)
-def load_model():
-    model = tf.saved_model.load("solar_model_deploy")
-    return model.signatures["serving_default"]
 
 if uploaded_file is not None:
 
@@ -72,7 +75,10 @@ if uploaded_file is not None:
     )
 
     with st.spinner("Loading AI model..."):
-        predict_fn = load_model()
+        interpreter = load_model()
+
+    input_details = interpreter.get_input_details()
+    output_details = interpreter.get_output_details()
 
     img = image.resize((224, 224))
 
@@ -81,14 +87,17 @@ if uploaded_file is not None:
     img_array = np.expand_dims(img_array, axis=0)
 
     with st.spinner("Analyzing the panel..."):
-        predictions_dict = predict_fn(
-            random_flip_input=tf.convert_to_tensor(
-                img_array,
-                dtype=tf.float32
-            )
+
+        interpreter.set_tensor(
+            input_details[0]["index"],
+            img_array
         )
 
-        predictions = predictions_dict["dense_1"].numpy()[0]
+        interpreter.invoke()
+
+        predictions = interpreter.get_tensor(
+            output_details[0]["index"]
+        )[0]
 
     predicted_idx = int(np.argmax(predictions))
     confidence = float(predictions[predicted_idx])
@@ -103,15 +112,20 @@ if uploaded_file is not None:
     )
 
     if predicted_class == "Clean":
-        st.success("The panel appears to be in good condition!")
+        st.success(
+            "The panel appears to be in good condition!"
+        )
     else:
-        st.warning("A defect or contamination has been detected!")
+        st.warning(
+            "A defect or contamination has been detected!"
+        )
 
     st.write("### Top 3 Predictions")
 
     top_indices = np.argsort(predictions)[-3:][::-1]
 
     for i, idx in enumerate(top_indices):
+
         class_name = CLASSES[idx]
         prob = float(predictions[idx])
 
@@ -129,6 +143,7 @@ if uploaded_file is not None:
             )
 
     with st.expander("View all class probabilities"):
+
         for i, prob in enumerate(predictions):
             st.write(
                 f"{CLASSES[i]}: {float(prob):.1%}"
