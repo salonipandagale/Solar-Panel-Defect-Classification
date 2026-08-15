@@ -1,6 +1,6 @@
 # Solar Panel Defect Detection using Deep Learning
 
-### Live demo :
+### Live demo : https://solar-panel-defect-classification-1.onrender.com/
 
 ## 1. Introduction 
 This project focuses on detecting defects in solar panels using deep learning techniques. Identifying defects early is crucial for maintaining efficiency and reducing operational costs in solar energy systems.
