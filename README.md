@@ -2,7 +2,7 @@
 
 A deep learning-based multi-class image classification system for identifying different conditions and defects in solar panels.
 
-**Live Demo:** solar-panel-defect-classification-1.onrender.com
+**Live Demo:** [solar-panel-defect-classification](https://solar-panel-defect-classification-1.onrender.com/)
 
 ---
 
